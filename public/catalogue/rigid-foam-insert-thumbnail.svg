@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Rigid box with foam insert — closed, three-quarter view">
+<title>Rigid box with foam insert — closed, three-quarter view</title>
+<rect width="800" height="600" fill="#faf8f5"/>
+<rect x="18" y="18" width="764" height="564" rx="18" fill="#f4f0e9"/>
+<ellipse cx="400" cy="398" rx="200" ry="32" fill="#191614" opacity="0.09"/><polygon points="165,463.8 428.7,548 428.7,411.9 165,327.7" fill="#453c34" stroke="#1d1815" stroke-width="1.7" stroke-linejoin="round"/><polygon points="635,482.1 428.7,548 428.7,411.9 635,346" fill="#312a24" stroke="#1d1815" stroke-width="1.7" stroke-linejoin="round"/><polygon points="371.3,261.9 635,346 428.7,411.9 165,327.7" fill="#5d5349" stroke="#1d1815" stroke-width="1.7" stroke-linejoin="round"/>
+</svg>

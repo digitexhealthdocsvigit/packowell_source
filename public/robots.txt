@@ -1,0 +1,16 @@
+# Crawlers: the catalogue and resources are meant to be indexed.
+#
+# At launch, confirm the domain in src/lib/site.ts and add:
+#   Sitemap: https://<confirmed-domain>/api/sitemap.xml
+# The URL set is generated from the live catalogue at that path, so it cannot
+# drift from the pages the UI renders. A Sitemap line is not added here yet
+# because the domain is still a placeholder.
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /enquiries
+# The sitemap is served by the API, so it is exempted from the /api/ block.
+Allow: /api/sitemap.xml
+
+# No AI-crawler rules on purpose: naming a crawler is a company policy
+# decision, not a technical default.

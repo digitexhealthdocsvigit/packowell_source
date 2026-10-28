@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Three-side-seal pouch — sachet, seal line shown">
+<title>Three-side-seal pouch — sachet, seal line shown</title>
+<rect width="800" height="600" fill="#faf8f5"/>
+<rect x="18" y="18" width="764" height="564" rx="18" fill="#f4f0e9"/>
+<ellipse cx="400" cy="502" rx="170" ry="24" fill="#191614" opacity="0.09"/><rect x="270" y="212" width="260" height="320" rx="8" fill="#e2e8ef" stroke="#93a0b0" stroke-width="1.7" stroke-linejoin="round"/><rect x="276" y="220" width="248" height="14" fill="#eef4fb" opacity="0.8"/>
+       <rect x="276" y="510" width="248" height="14" fill="#eef4fb" opacity="0.8"/><path d="M 280 222 L 520 222" stroke="#4a6b8a" stroke-width="3" stroke-dasharray="8 6"/>
+</svg>

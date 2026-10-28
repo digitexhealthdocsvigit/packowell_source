@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="POSM counter display — counter unit, alternate bay">
+<title>POSM counter display — counter unit, alternate bay</title>
+<rect width="800" height="600" fill="#faf8f5"/>
+<rect x="18" y="18" width="764" height="564" rx="18" fill="#f4f0e9"/>
+<ellipse cx="400" cy="426" rx="240" ry="26" fill="#191614" opacity="0.09"/><rect x="250" y="-18" width="300" height="420" fill="#f0eade" stroke="#a89e8d" stroke-width="1.7" stroke-linejoin="round"/><rect x="250" y="-18" width="300" height="54" fill="#b8791f" opacity="0.85"/><rect x="268" y="72" width="264" height="10" fill="#e0dace"/>
+                <rect x="268" y="26" width="264" height="46" fill="#ffffff" opacity="0.55" stroke="#a89e8d" stroke-width="1.1" stroke-linejoin="round"/><rect x="268" y="162" width="264" height="10" fill="#e0dace"/>
+                <rect x="268" y="116" width="264" height="46" fill="#ffffff" opacity="0.55" stroke="#a89e8d" stroke-width="1.1" stroke-linejoin="round"/><rect x="268" y="252" width="264" height="10" fill="#e0dace"/>
+                <rect x="268" y="206" width="264" height="46" fill="#ffffff" opacity="0.55" stroke="#a89e8d" stroke-width="1.1" stroke-linejoin="round"/>
+</svg>

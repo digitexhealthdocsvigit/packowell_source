@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Poly mailer — reverse, showing the fold construction">
+<title>Poly mailer — reverse, showing the fold construction</title>
+<rect width="800" height="600" fill="#faf8f5"/>
+<rect x="18" y="18" width="764" height="564" rx="18" fill="#f4f0e9"/>
+<ellipse cx="400" cy="382" rx="210" ry="30" fill="#191614" opacity="0.09"/><rect x="150" y="202" width="500" height="330" rx="10" fill="#e2e4e7" stroke="#aab0b8" stroke-width="1.7" stroke-linejoin="round"/><path d="M 150 202 L 400 378 L 650 202" fill="none" stroke="#aab0b8" stroke-width="1.6" opacity="0.7"/><path d="M 150 532 L 400 378 L 650 532" fill="none" stroke="#aab0b8" stroke-width="1.6" opacity="0.7"/>
+</svg>

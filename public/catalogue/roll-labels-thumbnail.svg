@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Roll labels — labels on a roll">
+<title>Roll labels — labels on a roll</title>
+<rect width="800" height="600" fill="#faf8f5"/>
+<rect x="18" y="18" width="764" height="564" rx="18" fill="#f4f0e9"/>
+<ellipse cx="400" cy="502" rx="190" ry="26" fill="#191614" opacity="0.09"/>
+    <ellipse cx="400" cy="417.9" rx="150" ry="51" fill="#ad8445" stroke="#8a6a34" stroke-width="1.7" stroke-linejoin="round"/>
+    <rect x="250" y="326.1" width="300" height="91.8" fill="#b58c4d"/>
+    <ellipse cx="400" cy="326.1" rx="150" ry="51" fill="#e8d0a4" stroke="#8a6a34" stroke-width="1.7" stroke-linejoin="round"/>
+    <ellipse cx="400" cy="326.1" rx="51" ry="17.3" fill="#d2ba8e" stroke="#8a6a34" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 550 346.5 Q 584 402 546 426" fill="none" stroke="#e8d0a4" stroke-width="4" opacity="0.9"/>
+</svg>

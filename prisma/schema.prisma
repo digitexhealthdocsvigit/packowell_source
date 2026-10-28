@@ -1,0 +1,356 @@
+// SHOGO:CUSTOM-START prisma-header
+// Managed by Shogo. Do not add a datasource `url` or change the generator `provider` — the database URL is configured in prisma.config.ts (Prisma 7+).
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+// SHOGO:CUSTOM-END
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+/// One row per inbound enquiry: quotation requests, sample requests and contact
+/// messages land here so nothing depends on an inbox forwarding rule.
+model Lead {
+  id String @id @default(cuid())
+
+  /// Human-readable reference quoted back to the customer, e.g. KL-4K7P2.
+  /// Uniqueness is enforced by the enquiry route, not by a constraint: the
+  /// auto-push pipeline cannot pass --accept-data-loss, so a unique index here
+  /// would block every regeneration on a populated table.
+  reference String?
+
+  /// quote | sample | contact
+  kind   String
+  /// new | contacted | quoted | won | lost
+  status String @default("new")
+
+  name        String
+  company     String?
+  email       String
+  phone       String?
+  city        String?
+  destination String?
+  /// Delivery PIN code, six digits. Validated in the enquiry route.
+  pincode     String?
+  /// ISO 3166-1 alpha-2 destination, resolved at submission time.
+  country     String?
+  countryName String?
+  /// Postal code in the destination's own format (pincode is kept for India).
+  postalCode  String?
+  /// Currency the quotation was requested in.
+  currency    String?
+
+  /// Price snapshot taken when an indicative figure was shown, so the desk can
+  /// see exactly what the customer saw: base amount, rate, converted figure and
+  /// the timestamp of the rate (not of the render).
+  baseCurrency String?
+  baseAmount   Float?
+  fxRate       Float?
+  displayAmount Float?
+  fxFetchedAt  DateTime?
+
+  productSlug String?
+  structureId String?
+  quantity    String?
+  /// free-text dimensions as supplied by the customer, e.g. "200 × 150 × 80 mm"
+  dimensions  String?
+  board       String?
+  finishing   String?
+  /// Foil stamping effect requested (gold, silver, holographic…), null when not required.
+  foil        String?
+  /// Printing method requested (flexo, digital, gravure…) — free text from the form.
+  printing    String?
+  /// Delivery requirements: deadline, split shipments, labelling, incoterms.
+  deliveryRequirements String?
+
+  message String?
+  /// JSON string of any extra fields the form collected
+  payload String?
+  /// path the enquiry was sent from, for attribution
+  source  String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([kind, status])
+  @@index([email])
+  @@map("leads")
+}
+
+/// One row per artwork file received, with the prepress verdict recorded at the
+/// moment it was checked. The bytes live on disk; this row is the audit trail
+/// for what the customer actually sent and what the desk told them about it.
+model Artwork {
+  id String @id @default(cuid())
+
+  /// Reference shown back to the customer, e.g. AW-4K7P2.
+  reference String?
+  filename  String
+  mime      String
+  bytes     Int
+  /// Detected from magic bytes, not the extension.
+  format    String
+  /// Storage key under the artwork data directory.
+  storedAs  String
+
+  /// The panel this file was checked against, and its geometry at the time.
+  structureId   String?
+  panelId       String?
+  panelLabel    String?
+  panelWidthMm  Float?
+  panelHeightMm Float?
+
+  widthPx      Int?
+  heightPx     Int?
+  colour       String?
+  effectiveDpi Float?
+
+  errors   Int     @default(0)
+  warnings Int     @default(0)
+  ready    Boolean @default(false)
+  /// JSON array of findings exactly as shown to the customer.
+  findings String?
+  /// JSON of the raw inspection result.
+  meta     String?
+
+  leadId String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@map("artwork")
+}
+
+/// Key/value store for owner-editable configuration (market policy, site flags).
+/// A table rather than a file so changes are auditable and survive redeploys.
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}
+
+/// One row per rate fetch. History is kept so a quotation can always be traced
+/// back to the exact rate that was live when it was drafted.
+model ExchangeRate {
+  id        String   @id @default(cuid())
+  base      String
+  quote     String
+  rate      Float
+  /// live | manual
+  source    String   @default("live")
+  provider  String?
+  /// Provider timestamp for the rate itself, not the insert time.
+  fetchedAt DateTime
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([base, quote, fetchedAt])
+  @@map("exchange_rates")
+}
+
+/// Per-destination commercial policy. Sparse: a country with no row is
+/// `quote-only`, which promises a written answer and nothing more.
+model Destination {
+  /// ISO 3166-1 alpha-2
+  code      String   @id
+  /// quote-only | served | not-served
+  status    String   @default("quote-only")
+  /// Optional currency override for this destination.
+  currency  String?
+  note      String?
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("destinations")
+}
+
+/// Product × destination availability, MOQ and lead-time overrides.
+model ProductMarket {
+  id           String   @id @default(cuid())
+  productSlug  String
+  country      String
+  available    Boolean  @default(true)
+  moq          Int?
+  leadTimeDays Int?
+  note         String?
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([productSlug, country])
+  @@map("product_markets")
+}
+
+
+/// One row per accepted quotation moving through the shop floor.
+///
+/// The twelve `stage` values are ordered and enforced in
+/// `src/lib/production/stages.ts`; the gate that decides whether a job may
+/// enter production lives in `src/lib/production/gate.ts` so it can be tested
+/// without a database or an HTTP request.
+model ProductionJob {
+  id String @id @default(cuid())
+
+  /// Human reference quoted to the customer, e.g. PJ-7K4M2. Uniqueness is
+  /// enforced in the route, not by a constraint (a unique index on a populated
+  /// table blocks the auto-push pipeline).
+  reference String?
+
+  /// Links back to the enquiry this job came from.
+  leadId     String?
+  /// Reference of the quotation that was accepted, as sent to the customer.
+  quoteRef   String?
+
+  customerName  String
+  customerEmail String
+  customerPhone String?
+
+  productSlug String?
+  productName String?
+
+  /// Specification the job is being built to. Free text where the desk needs
+  /// to record what was agreed, never used to derive a price.
+  dimensions      String?
+  material        String?
+  boardGrade      String?
+  quantity        Int?
+  finishes        String?
+  printSpec       String?
+  destination     String?
+  destinationCountry String?
+
+  /// Current position in the twelve-stage workflow.
+  stage  String @default("quote-accepted")
+  /// open | on-hold | closed
+  status String @default("open")
+
+  /// Explicit confirmations. A job cannot become production-ready without both.
+  specsConfirmed     Boolean   @default(false)
+  specsConfirmedBy   String?
+  specsConfirmedAt   DateTime?
+  artworkApproved    Boolean   @default(false)
+  artworkApprovedBy  String?
+  artworkApprovedAt  DateTime?
+
+  /// Derived, never set directly: recomputed by the gate on every change.
+  productionReady   Boolean   @default(false)
+  productionReadyAt DateTime?
+  /// Why the gate is closed, shown verbatim on the board.
+  blockedReason String?
+
+  dispatchCarrier  String?
+  dispatchTracking String?
+  dispatchedAt     DateTime?
+  deliveredAt      DateTime?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  versions ArtworkVersion[]
+  events   JobEvent[]
+  checks   QualityCheck[]
+
+  @@index([stage, status])
+  @@index([customerEmail])
+  @@map("production_jobs")
+}
+
+/// Append-only history. Every stage move, confirmation, approval and note lands
+/// here so the timeline on the board is the record, not a reconstruction.
+model JobEvent {
+  id    String @id @default(cuid())
+  jobId String
+
+  /// created | specs-confirmed | artwork-uploaded | artwork-approved |
+  /// artwork-rejected | stage-advanced | qc-recorded | dispatched | note
+  type String
+
+  fromStage String?
+  toStage   String?
+  note      String?
+  /// Who did it. A person's name or "system".
+  actor String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  job ProductionJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, createdAt])
+  @@map("job_events")
+}
+
+/// Every file attached to a job, versioned. Customer artwork, revised artwork
+/// and the approved production file are separate rows so a revision can never
+/// overwrite what was approved.
+model ArtworkVersion {
+  id    String @id @default(cuid())
+  jobId String
+
+  /// 1-based, increments per job.
+  version Int
+
+  /// customer | revised | production
+  role String @default("customer")
+
+  reference String?
+  filename  String
+  mime      String
+  bytes     Int
+  format    String
+  /// SHA-256 of the stored bytes, so two versions can be proven identical.
+  sha256   String
+  storedAs String
+
+  /// pending | approved | rejected | superseded
+  status String @default("pending")
+
+  /// Prepress verdict recorded when the file was uploaded.
+  prepressReady    Boolean @default(false)
+  prepressErrors   Int     @default(0)
+  prepressWarnings Int     @default(0)
+  findings         String?
+
+  approvedBy String?
+  approvedAt DateTime?
+  note       String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  job ProductionJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, version])
+  @@map("artwork_versions")
+}
+
+/// Inspection, defect and rework records. Kept separate from JobEvent because
+/// these are queried as data (defect rates, rework counts), not read as prose.
+model QualityCheck {
+  id    String @id @default(cuid())
+  jobId String
+
+  /// inspection | defect | rework
+  kind   String
+  /// pass | fail | reworked | open
+  result String
+
+  checkName String?
+  notes     String?
+  actor     String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  job ProductionJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, kind])
+  @@map("quality_checks")
+}

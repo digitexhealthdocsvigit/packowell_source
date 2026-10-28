@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Pastry box with window — closed, three-quarter view">
+<title>Pastry box with window — closed, three-quarter view</title>
+<rect width="800" height="600" fill="#faf8f5"/>
+<rect x="18" y="18" width="764" height="564" rx="18" fill="#f4f0e9"/>
+<ellipse cx="400" cy="398" rx="200" ry="32" fill="#191614" opacity="0.09"/><polygon points="165,515.1 426.1,598.4 426.1,362.3 165,278.9" fill="#f0eade" stroke="#a89e8d" stroke-width="1.7" stroke-linejoin="round"/><polygon points="635,531.7 426.1,598.4 426.1,362.3 635,295.6" fill="#d8cfbf" stroke="#a89e8d" stroke-width="1.7" stroke-linejoin="round"/><polygon points="373.9,212.3 635,295.6 426.1,362.3 165,278.9" fill="#ffffff" stroke="#a89e8d" stroke-width="1.7" stroke-linejoin="round"/><polygon points="593.2,474.2 467.9,514.2 467.9,400.9 593.2,360.9" fill="#eef5f9" opacity="0.92" stroke="#a89e8d" stroke-width="1.4" stroke-linejoin="round"/>
+</svg>

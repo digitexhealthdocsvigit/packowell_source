@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Book-style rigid box — book-style rigid box, lid open">
+<title>Book-style rigid box — book-style rigid box, lid open</title>
+<rect width="800" height="600" fill="#faf8f5"/>
+<rect x="18" y="18" width="764" height="564" rx="18" fill="#f4f0e9"/>
+<ellipse cx="400" cy="402" rx="210" ry="30" fill="#191614" opacity="0.09"/><polygon points="165,427.8 442.2,516.2 442.2,439.3 165,350.8" fill="#453c34" stroke="#1d1815" stroke-width="1.7" stroke-linejoin="round"/><polygon points="635,454.7 442.2,516.2 442.2,439.3 635,377.8" fill="#312a24" stroke="#1d1815" stroke-width="1.7" stroke-linejoin="round"/><polygon points="357.8,289.3 635,377.8 442.2,439.3 165,350.8" fill="#5d5349" stroke="#1d1815" stroke-width="1.7" stroke-linejoin="round"/><polygon points="357.8,289.3 635,377.8 635,379.3 357.8,290.8" fill="#c9a227" opacity="0.5"/><path d="M 357.8 289.3 L 317.8 169.3 L 595 257.8 L 635 377.8 Z" fill="#6b6157" stroke="#1d1815" stroke-width="1.7" stroke-linejoin="round"/>
+</svg>
