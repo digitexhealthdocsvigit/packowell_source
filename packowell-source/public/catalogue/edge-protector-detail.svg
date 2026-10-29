@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Edge &amp; corner protector — corner section">
+<title>Edge &amp; corner protector — corner section</title>
+<rect width="800" height="600" fill="#faf8f5"/>
+<rect x="18" y="18" width="764" height="564" rx="18" fill="#f4f0e9"/>
+<ellipse cx="400" cy="422" rx="220" ry="30" fill="#191614" opacity="0.09"/><path d="M 190 512 L 190 272 L 340 212 L 340 332 L 270 370 L 270 512 Z" fill="#cfa96b" stroke="#8a6a34" stroke-width="1.7" stroke-linejoin="round"/><path d="M 200 332 L 490 332" stroke="#a88852" stroke-width="1.2" opacity="0.4"/>
+</svg>

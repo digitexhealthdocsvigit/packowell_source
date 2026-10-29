@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Poly mailer — front view, sealed">
+<title>Poly mailer — front view, sealed</title>
+<rect width="800" height="600" fill="#faf8f5"/>
+<rect x="18" y="18" width="764" height="564" rx="18" fill="#f4f0e9"/>
+<ellipse cx="400" cy="382" rx="210" ry="30" fill="#191614" opacity="0.09"/><rect x="150" y="206" width="500" height="320" rx="10" fill="#eaecef" stroke="#aab0b8" stroke-width="1.7" stroke-linejoin="round"/><path d="M 150 206 L 400 353.2 L 650 206" fill="#fcfcfd" stroke="#aab0b8" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>

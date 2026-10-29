@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Wristbands — band formed into a loop">
+<title>Wristbands — band formed into a loop</title>
+<rect width="800" height="600" fill="#faf8f5"/>
+<rect x="18" y="18" width="764" height="564" rx="18" fill="#f4f0e9"/>
+<ellipse cx="400" cy="492" rx="170" ry="24" fill="#191614" opacity="0.09"/><ellipse cx="400" cy="362" rx="150" ry="120" fill="none" stroke="#f0eade" stroke-width="46"/>
+         <ellipse cx="400" cy="362" rx="150" ry="120" fill="none" stroke="#a89e8d" stroke-width="1.6" opacity="0.5"/>
+         <rect x="360" y="232" width="80" height="34" rx="8" fill="#b8791f" opacity="0.8"/>
+</svg>
