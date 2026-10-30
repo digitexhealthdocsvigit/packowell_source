@@ -94,9 +94,20 @@ export function useSeo({ title, description, path, jsonLd, noindex }: SeoInput) 
 
 export const orgJsonLd = () => ({
   '@type': 'Organization',
+  '@id': 'https://packaging.vyaparsethu.com/#organization',
   name: site.name,
   legalName: site.configured ? site.legalName : undefined,
-  url: URL_CONFIRMED ? site.url : undefined,
+  url: URL_CONFIRMED ? site.url : 'https://packaging.vyaparsethu.com',
+  parentOrganization: {
+    '@type': 'Organization',
+    '@id': 'https://vyaparsethu.com/#organization',
+    name: 'VyaparSethu B2B Network',
+    url: 'https://vyaparsethu.com',
+  },
+  potentialAction: {
+    '@type': 'QuoteAction',
+    target: 'https://packaging.vyaparsethu.com/quote?product={product_slug}',
+  },
   description: site.tagline,
   address: site.configured
     ? {
@@ -112,6 +123,31 @@ export const orgJsonLd = () => ({
   telephone: site.configured ? `+${site.phone.replace(/[^\d]/g, '')}` : undefined,
   vatID: site.configured ? site.gstin : undefined,
 })
+
+export const vyaparsethuOrgGraph = () => [
+  {
+    '@type': 'Organization',
+    '@id': 'https://vyaparsethu.com/#organization',
+    name: 'VyaparSethu B2B Network',
+    url: 'https://vyaparsethu.com',
+    logo: 'https://vyaparsethu.com/logo.png',
+  },
+  {
+    '@type': 'Organization',
+    '@id': 'https://packaging.vyaparsethu.com/#organization',
+    name: 'Packowell Custom Packaging & Prepress Portal',
+    url: 'https://packaging.vyaparsethu.com',
+    parentOrganization: {
+      '@id': 'https://vyaparsethu.com/#organization',
+    },
+    description:
+      'Automated packaging calculation, instant quoting, and automated pre-press artwork validation portal.',
+    potentialAction: {
+      '@type': 'QuoteAction',
+      target: 'https://packaging.vyaparsethu.com/quote?product={product_slug}',
+    },
+  },
+]
 
 export const breadcrumbJsonLd = (crumbs: { name: string; path: string }[]) => ({
   '@type': 'BreadcrumbList',
