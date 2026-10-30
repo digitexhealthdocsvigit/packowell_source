@@ -27,9 +27,11 @@ app.use('*', async (c, next) => {
 app.get('/health', async (c) => {
   let dbStatus = 'ok'
   let dbError: string | null = null
+  let tables: string[] = []
   try {
     const { prisma } = await import('./src/lib/db')
-    await prisma.$queryRawUnsafe('SELECT 1')
+    const result = await prisma.$queryRawUnsafe<{ name: string }[]>('SELECT name FROM sqlite_master WHERE type=\'table\' AND name NOT LIKE \'sqlite_%\' AND name NOT LIKE \'_litestream_%\'')
+    tables = result.map((r) => r.name)
   } catch (err: unknown) {
     dbStatus = 'error'
     dbError = err instanceof Error ? err.message : String(err)
@@ -38,6 +40,7 @@ app.get('/health', async (c) => {
     ok: dbStatus === 'ok',
     database: dbStatus,
     dbError,
+    tables,
     timestamp: new Date().toISOString(),
   })
 })

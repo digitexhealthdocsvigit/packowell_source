@@ -240,17 +240,18 @@ app.post('/market/convert', async (c) => {
  * double-submits, and a reference the customer can quote back.
  */
 app.post('/enquiries', async (c) => {
-  let body: Record<string, unknown>
   try {
-    body = (await c.req.json()) as Record<string, unknown>
-  } catch {
-    return c.json({ error: 'Could not read that submission.' }, 400)
-  }
+    let body: Record<string, unknown>
+    try {
+      body = (await c.req.json()) as Record<string, unknown>
+    } catch {
+      return c.json({ error: 'Could not read that submission.' }, 400)
+    }
 
-  // Honeypot: a real person never fills a hidden field.
-  if (typeof body.website === 'string' && body.website.trim() !== '') {
-    return c.json({ ok: true, reference: null, note: 'accepted' }, 201)
-  }
+    // Honeypot: a real person never fills a hidden field.
+    if (typeof body.website === 'string' && body.website.trim() !== '') {
+      return c.json({ ok: true, reference: null, note: 'accepted' }, 201)
+    }
 
   const kind = String(body.kind ?? '').trim()
   if (!KINDS.has(kind)) {
@@ -412,8 +413,7 @@ app.post('/enquiries', async (c) => {
     }
   }
 
-  try {
-    const created = await prisma.lead.create({
+  const created = await prisma.lead.create({
       data: {
         reference,
         kind,

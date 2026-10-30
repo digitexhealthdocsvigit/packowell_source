@@ -63,11 +63,12 @@ export function mergePolicy(input: Partial<MarketPolicy> | null | undefined): Ma
 }
 
 export async function loadPolicy(): Promise<MarketPolicy> {
-  const row = await prisma.setting.findUnique({ where: { key: POLICY_KEY } })
-  if (!row) return mergePolicy(null)
   try {
+    const row = await prisma.setting.findUnique({ where: { key: POLICY_KEY } })
+    if (!row) return mergePolicy(null)
     return mergePolicy(JSON.parse(row.value))
-  } catch {
+  } catch (err) {
+    console.error('[market] loadPolicy error', err)
     return mergePolicy(null)
   }
 }
@@ -113,22 +114,27 @@ function toQuote(row: RateRow): RateQuote {
  * this is the view the app reads.
  */
 export async function listRates(base?: string): Promise<RateQuote[]> {
-  const policy = base ? null : await loadPolicy()
-  const baseCurrency = base ?? policy!.fx.baseCurrency
-  const rows = await prisma.exchangeRate.findMany({
-    where: { base: baseCurrency },
-    orderBy: { fetchedAt: 'desc' },
-    take: 400,
-  })
-  const seen = new Set<string>()
-  const out: RateQuote[] = []
-  for (const row of rows) {
-    const key = `${row.source}:${row.quote}`
-    if (seen.has(key)) continue
-    seen.add(key)
-    out.push(toQuote(row))
+  try {
+    const policy = base ? null : await loadPolicy()
+    const baseCurrency = base ?? policy!.fx.baseCurrency
+    const rows = await prisma.exchangeRate.findMany({
+      where: { base: baseCurrency },
+      orderBy: { fetchedAt: 'desc' },
+      take: 400,
+    })
+    const seen = new Set<string>()
+    const out: RateQuote[] = []
+    for (const row of rows) {
+      const key = `${row.source}:${row.quote}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      out.push(toQuote(row))
+    }
+    return out
+  } catch (err) {
+    console.error('[market] listRates error', err)
+    return []
   }
-  return out
 }
 
 export async function recordManualRate(quote: CurrencyCode, rate: number, base: string): Promise<RateQuote> {
@@ -223,13 +229,18 @@ export async function syncRates(policy: MarketPolicy): Promise<SyncOutcome> {
 }
 
 export async function listDestinations(): Promise<DestinationOverride[]> {
-  const rows = await prisma.destination.findMany({ orderBy: { code: 'asc' } })
-  return rows.map((r) => ({
-    code: r.code,
-    status: (DESTINATION_STATUSES.includes(r.status as DestinationStatus) ? r.status : 'quote-only') as DestinationStatus,
-    currency: isCurrencyCode(r.currency) ? r.currency : null,
-    note: r.note,
-  }))
+  try {
+    const rows = await prisma.destination.findMany({ orderBy: { code: 'asc' } })
+    return rows.map((r) => ({
+      code: r.code,
+      status: (DESTINATION_STATUSES.includes(r.status as DestinationStatus) ? r.status : 'quote-only') as DestinationStatus,
+      currency: isCurrencyCode(r.currency) ? r.currency : null,
+      note: r.note,
+    }))
+  } catch (err) {
+    console.error('[market] listDestinations error', err)
+    return []
+  }
 }
 
 export async function setDestination(
@@ -265,15 +276,20 @@ export async function setDestination(
 }
 
 export async function listProductRules(): Promise<ProductRule[]> {
-  const rows = await prisma.productMarket.findMany({ orderBy: [{ productSlug: 'asc' }, { country: 'asc' }] })
-  return rows.map((r) => ({
-    productSlug: r.productSlug,
-    country: r.country,
-    available: r.available,
-    moq: r.moq,
-    leadTimeDays: r.leadTimeDays,
-    note: r.note,
-  }))
+  try {
+    const rows = await prisma.productMarket.findMany({ orderBy: [{ productSlug: 'asc' }, { country: 'asc' }] })
+    return rows.map((r) => ({
+      productSlug: r.productSlug,
+      country: r.country,
+      available: r.available,
+      moq: r.moq,
+      leadTimeDays: r.leadTimeDays,
+      note: r.note,
+    }))
+  } catch (err) {
+    console.error('[market] listProductRules error', err)
+    return []
+  }
 }
 
 export async function setProductRule(rule: ProductRule): Promise<ProductRule> {
