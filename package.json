@@ -12,6 +12,7 @@
     "build": "vite build",
     "start": "bun run server.tsx",
     "generate": "bun ./node_modules/@shogo-ai/sdk/bin/cli.mjs generate",
+    "db:migrate:turso": "bun scripts/migrate.mjs",
     "db:generate": "bun x --bun prisma generate",
     "db:migrate:dev": "bun x --bun prisma migrate dev",
     "db:migrate:deploy": "bun x --bun prisma migrate deploy",
