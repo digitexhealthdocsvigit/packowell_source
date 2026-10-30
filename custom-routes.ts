@@ -110,6 +110,7 @@ import {
   listProductRules,
   listRates,
   loadPolicy,
+  mergePolicy,
   pickRate,
   recordManualRate,
   savePolicy,
@@ -176,7 +177,18 @@ app.get('/market', async (c) => {
     })
   } catch (error) {
     console.error('[market] snapshot failed', error)
-    return c.json({ error: 'Market configuration could not be loaded.' }, 500)
+    const fallback = toSnapshot(mergePolicy(null), [], [], [])
+    return c.json({
+      ...fallback,
+      countries: COUNTRIES,
+      currencies: CURRENCY_CODES.map((code) => CURRENCIES[code]),
+      postal: Object.fromEntries(
+        COUNTRIES.map((country) => {
+          const rule = postalRule(country.code)
+          return [country.code, { label: rule.label, hint: rule.hint, required: rule.required }]
+        }),
+      ),
+    })
   }
 })
 

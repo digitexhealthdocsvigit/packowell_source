@@ -23,8 +23,24 @@ app.use('*', async (c, next) => {
   await next()
 })
 
-// Health check endpoint
-app.get('/health', (c) => c.json({ ok: true, timestamp: new Date().toISOString() }))
+// Health check endpoint with database diagnostics
+app.get('/health', async (c) => {
+  let dbStatus = 'ok'
+  let dbError: string | null = null
+  try {
+    const { prisma } = await import('./src/lib/db')
+    await prisma.$queryRawUnsafe('SELECT 1')
+  } catch (err: unknown) {
+    dbStatus = 'error'
+    dbError = err instanceof Error ? err.message : String(err)
+  }
+  return c.json({
+    ok: dbStatus === 'ok',
+    database: dbStatus,
+    dbError,
+    timestamp: new Date().toISOString(),
+  })
+})
 
 // CRUD routes (available after schema.prisma has models)
 try {
