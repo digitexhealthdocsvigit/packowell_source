@@ -24,13 +24,15 @@ app.use('*', async (c, next) => {
 })
 
 // Health check endpoint with database diagnostics
-app.get('/health', async (c) => {
+const healthHandler = async (c: any) => {
   let dbStatus = 'ok'
   let dbError: string | null = null
   let tables: string[] = []
   try {
     const { prisma } = await import('./src/lib/db')
-    const result = await prisma.$queryRawUnsafe<{ name: string }[]>('SELECT name FROM sqlite_master WHERE type=\'table\' AND name NOT LIKE \'sqlite_%\' AND name NOT LIKE \'_litestream_%\'')
+    const result = await prisma.$queryRawUnsafe<{ name: string }[]>(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE '_litestream_%'",
+    )
     tables = result.map((r) => r.name)
   } catch (err: unknown) {
     dbStatus = 'error'
@@ -43,7 +45,10 @@ app.get('/health', async (c) => {
     tables,
     timestamp: new Date().toISOString(),
   })
-})
+}
+
+app.get('/health', healthHandler)
+app.get('/api/health', healthHandler)
 
 // CRUD routes (available after schema.prisma has models)
 try {
