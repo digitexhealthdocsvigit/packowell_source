@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "users" (
+CREATE TABLE IF NOT EXISTS "users" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "email" TEXT NOT NULL,
     "name" TEXT,
@@ -8,7 +8,7 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
-CREATE TABLE "leads" (
+CREATE TABLE IF NOT EXISTS "leads" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "reference" TEXT,
     "kind" TEXT NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE "leads" (
 );
 
 -- CreateTable
-CREATE TABLE "artwork" (
+CREATE TABLE IF NOT EXISTS "artwork" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "reference" TEXT,
     "filename" TEXT NOT NULL,
@@ -73,14 +73,14 @@ CREATE TABLE "artwork" (
 );
 
 -- CreateTable
-CREATE TABLE "settings" (
+CREATE TABLE IF NOT EXISTS "settings" (
     "key" TEXT NOT NULL PRIMARY KEY,
     "value" TEXT NOT NULL,
     "updated_at" DATETIME NOT NULL
 );
 
 -- CreateTable
-CREATE TABLE "exchange_rates" (
+CREATE TABLE IF NOT EXISTS "exchange_rates" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "base" TEXT NOT NULL,
     "quote" TEXT NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE "exchange_rates" (
 );
 
 -- CreateTable
-CREATE TABLE "destinations" (
+CREATE TABLE IF NOT EXISTS "destinations" (
     "code" TEXT NOT NULL PRIMARY KEY,
     "status" TEXT NOT NULL DEFAULT 'quote-only',
     "currency" TEXT,
@@ -101,7 +101,7 @@ CREATE TABLE "destinations" (
 );
 
 -- CreateTable
-CREATE TABLE "product_markets" (
+CREATE TABLE IF NOT EXISTS "product_markets" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "productSlug" TEXT NOT NULL,
     "country" TEXT NOT NULL,
@@ -113,7 +113,7 @@ CREATE TABLE "product_markets" (
 );
 
 -- CreateTable
-CREATE TABLE "production_jobs" (
+CREATE TABLE IF NOT EXISTS "production_jobs" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "reference" TEXT,
     "leadId" TEXT,
@@ -151,7 +151,7 @@ CREATE TABLE "production_jobs" (
 );
 
 -- CreateTable
-CREATE TABLE "job_events" (
+CREATE TABLE IF NOT EXISTS "job_events" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "jobId" TEXT NOT NULL,
     "type" TEXT NOT NULL,
@@ -164,7 +164,7 @@ CREATE TABLE "job_events" (
 );
 
 -- CreateTable
-CREATE TABLE "artwork_versions" (
+CREATE TABLE IF NOT EXISTS "artwork_versions" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "jobId" TEXT NOT NULL,
     "version" INTEGER NOT NULL,
@@ -189,7 +189,7 @@ CREATE TABLE "artwork_versions" (
 );
 
 -- CreateTable
-CREATE TABLE "quality_checks" (
+CREATE TABLE IF NOT EXISTS "quality_checks" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "jobId" TEXT NOT NULL,
     "kind" TEXT NOT NULL,
@@ -202,35 +202,35 @@ CREATE TABLE "quality_checks" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+CREATE UNIQUE INDEX IF NOT EXISTS "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE INDEX "leads_kind_status_idx" ON "leads"("kind", "status");
+CREATE INDEX IF NOT EXISTS "leads_kind_status_idx" ON "leads"("kind", "status");
 
 -- CreateIndex
-CREATE INDEX "leads_email_idx" ON "leads"("email");
+CREATE INDEX IF NOT EXISTS "leads_email_idx" ON "leads"("email");
 
 -- CreateIndex
-CREATE INDEX "artwork_created_at_idx" ON "artwork"("created_at");
+CREATE INDEX IF NOT EXISTS "artwork_created_at_idx" ON "artwork"("created_at");
 
 -- CreateIndex
-CREATE INDEX "exchange_rates_base_quote_fetchedAt_idx" ON "exchange_rates"("base", "quote", "fetchedAt");
+CREATE INDEX IF NOT EXISTS "exchange_rates_base_quote_fetchedAt_idx" ON "exchange_rates"("base", "quote", "fetchedAt");
 
 -- CreateIndex
-CREATE INDEX "product_markets_productSlug_country_idx" ON "product_markets"("productSlug", "country");
+CREATE INDEX IF NOT EXISTS "product_markets_productSlug_country_idx" ON "product_markets"("productSlug", "country");
 
 -- CreateIndex
-CREATE INDEX "production_jobs_stage_status_idx" ON "production_jobs"("stage", "status");
+CREATE INDEX IF NOT EXISTS "production_jobs_stage_status_idx" ON "production_jobs"("stage", "status");
 
 -- CreateIndex
-CREATE INDEX "production_jobs_customerEmail_idx" ON "production_jobs"("customerEmail");
+CREATE INDEX IF NOT EXISTS "production_jobs_customerEmail_idx" ON "production_jobs"("customerEmail");
 
 -- CreateIndex
-CREATE INDEX "job_events_jobId_created_at_idx" ON "job_events"("jobId", "created_at");
+CREATE INDEX IF NOT EXISTS "job_events_jobId_created_at_idx" ON "job_events"("jobId", "created_at");
 
 -- CreateIndex
-CREATE INDEX "artwork_versions_jobId_version_idx" ON "artwork_versions"("jobId", "version");
+CREATE INDEX IF NOT EXISTS "artwork_versions_jobId_version_idx" ON "artwork_versions"("jobId", "version");
 
 -- CreateIndex
-CREATE INDEX "quality_checks_jobId_kind_idx" ON "quality_checks"("jobId", "kind");
+CREATE INDEX IF NOT EXISTS "quality_checks_jobId_kind_idx" ON "quality_checks"("jobId", "kind");
 
