@@ -14,7 +14,12 @@ try {
   console.log(`Connecting to Turso database: ${url}...`)
   const client = createClient({ url, authToken })
 
-  const sql = readFileSync('migration.sql', 'utf8')
+  let sql = readFileSync('migration.sql', 'utf8')
+  // Strip UTF-8 Byte Order Mark (BOM) if present
+  if (sql.charCodeAt(0) === 0xfeff) {
+    sql = sql.slice(1)
+  }
+  sql = sql.trim()
   console.log('Executing migration.sql...')
   await client.executeMultiple(sql)
 
